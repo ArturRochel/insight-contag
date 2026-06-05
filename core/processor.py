@@ -8,9 +8,16 @@ def processar_dados(data_raw: pd.DataFrame) -> pd.DataFrame:
         data_raw: Dataframe bruto com os dados extraídos da planilha.
 
     Returns:
-        Retorna um DataFrame limpo e padronizado com os dados extraídos.
+        Retorna um DataFrame limpo e padronizado com os dados extraídos, e o número de linhas descartadas.
     """
-    df = data_raw.drop(columns=0)
+    # Remove a primeira coluna vazia
+    df = data_raw.drop(columns="Unnamed: 0")
+
+    # Quantidade de linhas antes da limpeza
+    linhas_antes = df.shape[0]
+
+    # Remove espaços nos nomes das colunas
+    df.columns = df.columns.str.strip()
 
     # Renomeia as colunas 
     df = df.rename(columns={
@@ -35,9 +42,26 @@ def processar_dados(data_raw: pd.DataFrame) -> pd.DataFrame:
     df["tempo_de_espera"] = df["hora_inicio"] - df["hora_do_contato"]
 
     # Padroniza labels de atendimento
-    # todo - Utilizar o applu: lambda para padronizar todos os campos de label
-    df["demanda_assunto"] = df["demanda_assunto"].str.strip().str.capitalize()
-    df["status"] = df["status"].str.strip().str.capitalize()
+    df[["demanda_assunto", "status_da_demanda"]] = df[["demanda_assunto", "status_da_demanda"]].apply(lambda x: x.str.strip().str.capitalize())
+    df[["consultor", "ug_solicitante"]] = df[["consultor", "ug_solicitante"]].apply(lambda x: x.str.strip())
 
-    # Limpeza de linhas
-    df = df.dropna(subset=[["hora_do_contato", "hora_inicio", "hora_fim"]])
+    # Limpeza de linhas inválidas
+    df = df.dropna(subset=["data", "hora_do_contato", "status_da_demanda", "consultor", "ug_solicitante"])
+
+    # Quantidade de linhas após a limpeza
+    linhas_invalidas = linhas_antes - df.shape[0]
+
+    return df, linhas_invalidas
+
+
+if __name__ == "__main__":
+    from data.loader import carregar_dados
+
+    URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4AgqUl5RIbxfQsMdqZ8wvqOpr7tu9dV5ptppemkinjdo3ft6drQJId19YDUBxbPqnsMhipn8825uX/pub?gid=1730979164&single=true&output=csv"
+
+    df_raw = carregar_dados(URL)
+
+    df, linhas = processar_dados(df_raw)
+
+    print(df.head())
+    print(f"Linhas descartadas: {linhas}")
