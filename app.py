@@ -21,7 +21,14 @@ df, linhas = processar_dados(df_raw) # Retorna o Dataframe limpo e número de li
 graficos = graficos_gerais(df=df)
 
 st.title("Insights Consultória CONTAG")
+
+# Métricas
 st.metric(label="Total de Atendimentos",value=graficos["cards"]["quant_atendimentos"], help="Total de atendimentos desde o início da base de dados")
 st.metric(label="Média de Atendimentos Diários",value=graficos["cards"]["media_diaria"], help="Média de atendimentos diários realizados")
+st.metric(label="Média de Atendimentos Mensal", value=graficos["cards"]["mendia_mensal"])
+st.metric(label="Tempo Médio de Espera", value=graficos["cards"]["tempo_medio_espera"])
+st.metric(label="Tempo Médio de Atendimento", value=graficos["cards"]["tempo_medio_atendimento"])
+
+# Gráficos
 st.plotly_chart(figure_or_data=graficos["graficos"]["atendimentos_mes"])
 st.plotly_chart(figure_or_data=graficos["graficos"]["atendimentos_dia"])
