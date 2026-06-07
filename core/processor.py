@@ -1,4 +1,8 @@
 import pandas as pd
+import plotly.express as px
+import locale
+
+locale.setlocale(locale.LC_TIME, "pt_BR.UTF-8")
 
 def processar_dados(data_raw: pd.DataFrame) -> pd.DataFrame:
     """
@@ -39,7 +43,7 @@ def processar_dados(data_raw: pd.DataFrame) -> pd.DataFrame:
     df[["hora_do_contato", "hora_inicio", "hora_fim", "tempo_decorrido"]] = df[["hora_do_contato", "hora_inicio", "hora_fim", "tempo_decorrido"]].apply(lambda x: pd.to_timedelta(x, errors="coerce"))
 
     # Adiciona a coluna que calcula o tempo de espera
-    df["tempo_de_espera"] = df["hora_inicio"] - df["hora_do_contato"]
+    df["tempo_de_espera"] = pd.to_timedelta(df["hora_inicio"] - df["hora_do_contato"])
 
     # Padroniza labels de atendimento
     df[["demanda_assunto", "status_da_demanda"]] = df[["demanda_assunto", "status_da_demanda"]].apply(lambda x: x.str.strip().str.capitalize())
@@ -56,6 +60,7 @@ def processar_dados(data_raw: pd.DataFrame) -> pd.DataFrame:
 
 if __name__ == "__main__":
     from data.loader import carregar_dados
+    from ui.charts import graficos_gerais
 
     URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4AgqUl5RIbxfQsMdqZ8wvqOpr7tu9dV5ptppemkinjdo3ft6drQJId19YDUBxbPqnsMhipn8825uX/pub?gid=1730979164&single=true&output=csv"
 
@@ -63,5 +68,6 @@ if __name__ == "__main__":
 
     df, linhas = processar_dados(df_raw)
 
-    print(df.head())
-    print(f"Linhas descartadas: {linhas}")
+    graficos = graficos_gerais(df=df)
+
+    print(graficos)

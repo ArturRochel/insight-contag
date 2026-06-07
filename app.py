@@ -1,0 +1,27 @@
+import pandas as pd
+import streamlit as st
+from data.loader import carregar_dados
+from core.processor import processar_dados
+from ui.charts import graficos_gerais
+
+st.set_page_config(
+    page_title="Insight Contag", 
+    page_icon="🧮", 
+    layout="wide"
+)
+
+URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT4AgqUl5RIbxfQsMdqZ8wvqOpr7tu9dV5ptppemkinjdo3ft6drQJId19YDUBxbPqnsMhipn8825uX/pub?gid=1730979164&single=true&output=csv"
+
+@st.cache_data(ttl=300)
+def carregar_dados_cached() -> pd.DataFrame:
+    return carregar_dados(URL)
+
+df_raw = carregar_dados_cached()
+df, linhas = processar_dados(df_raw) # Retorna o Dataframe limpo e número de linhas excluídas
+graficos = graficos_gerais(df=df)
+
+st.title("Insights Consultória CONTAG")
+st.metric(label="Total de Atendimentos",value=graficos["cards"]["quant_atendimentos"], help="Total de atendimentos desde o início da base de dados")
+st.metric(label="Média de Atendimentos Diários",value=graficos["cards"]["media_diaria"], help="Média de atendimentos diários realizados")
+st.plotly_chart(figure_or_data=graficos["graficos"]["atendimentos_mes"])
+st.plotly_chart(figure_or_data=graficos["graficos"]["atendimentos_dia"])
