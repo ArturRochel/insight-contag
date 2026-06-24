@@ -57,6 +57,15 @@ def graficos_gerais(df: pd.DataFrame) -> dict:
     # Tempo médio de atendimento mensal
     tempo_medio_mensal = formatar_timedelta(tempo_total / len(atendimentos_mes))
 
+    # UG Solicitante mais recorrente
+    ugs_solicitantes = df["ug_solicitante"].value_counts().reset_index().to_dict(orient="records")
+
+    ug_mais_recorrente = ugs_solicitantes[0]
+
+    demandas_assuntos = df["demanda_assunto"].value_counts().reset_index().to_dict(orient="records")
+
+    demanda_mais_recorrente = demandas_assuntos[0]
+    
     fig_atendimentos_mes = px.bar(
         meses,
         x="data",

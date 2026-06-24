@@ -68,6 +68,16 @@ if __name__ == "__main__":
 
     df, linhas = processar_dados(df_raw)
 
+    ugs_solicitantes = df["ug_solicitante"].value_counts().reset_index().to_dict(orient="records")
+
+    ug_mais_recorrente = ugs_solicitantes[0]
+
+    demandas_assuntos = df["demanda_assunto"].value_counts().reset_index().to_dict(orient="records")
+
+    demanda_mais_recorrente = demandas_assuntos[0]
+
     graficos = graficos_gerais(df=df)
 
-    print(graficos)
+    mensagem = f"A UG mais recorrente é {ug_mais_recorrente["ug_solicitante"]} com {ug_mais_recorrente["count"]} atendimentos no total. \n A demanda mais recorrente é {demanda_mais_recorrente["demanda_assunto"]} com {demanda_mais_recorrente["count"]} recorrências."
+
+    print(mensagem)
