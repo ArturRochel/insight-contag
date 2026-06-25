@@ -3,28 +3,7 @@ site_url: "http://10.2.64.37:8095/insight-contag/"
 repo_url: https://github.com/ArturRochel/insight-contag
 repo_name: insight-contag
 nav:
-  - "Arquitetura": index.md
-  - "Layers":
-    - "Components": "texts/layers/components.md"
-    - "Pages": "texts/layers/pages.md"
-    - "UI": "texts/layers/ui.md"
-    - "Composables": "texts/layers/composables.md"
-    - "Stores": "texts/layers/stores.md"
-    - "Services": "texts/layers/services.md"
-    - "Models": "texts/layers/models.md"
-    - "Styles": "texts/layers/styles.md"
-    - "Utils": "texts/layers/utils.md"
-  - "Shared":
-    - "shared/utils": "texts/shared/utils.md"
-  - "Theme":
-    - "theme.ts": "texts/themes/theme.md"
-    - "global.css": "texts/themes/global.md"
-    - "typography.css": "texts/themes/typography.md"
-  - "Dependências": "texts/dependencies.md"
-
-  - "Documentação": texts/documentacao.md
-  - "Referências": "texts/referencias.md"
-  - "Notas de versão": changes.md
+  - "Visão Geral": index.md
 validation:
   nav:
     omitted_files: warn
@@ -69,7 +48,7 @@ markdown_extensions:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 watch:
-  - readme.md
+  - README.md
 extra_css:
   - css/custom.css
 extra_javascript:

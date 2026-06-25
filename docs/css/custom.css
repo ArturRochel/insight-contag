@@ -1,0 +1,44 @@
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  margin-top: 1.25em;
+}
+
+.md-source-file {
+  margin-top: 0 !important;
+  margin-bottom: 1rem !important;
+}
+
+.md-content h1 {
+  margin-bottom: 0rem;
+}
+
+.md-footer {
+  margin-top: 1rem;
+}
+
+.md-typeset .admonition,
+.md-typeset details {
+  font-size: 0.75rem;
+}
+
+.md-typeset h1 .twemoji {
+  margin-right: 0.1rem;
+  margin-top: 0.2rem;
+  height: 0.9em;
+  width: 0.9em;
+}
+
+.md-typeset h2 .twemoji {
+  margin-right: 0.2rem;
+  margin-top: 0.15rem;
+  height: 0.9em;
+  width: 0.9em;
+}
+
+.md-typeset h3 .twemoji,
+.md-typeset h4 .twemoji,
+.md-typeset h5 .twemoji,
+.md-typeset h6 .twemoji {
+  margin-right: 0.2rem;
+}
