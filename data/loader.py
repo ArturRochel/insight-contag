@@ -5,7 +5,7 @@ def carregar_dados(url: str) -> pd.DataFrame:
     Essa função extrai os dados da planilha pública.
 
     Args:
-        url: URL pública de acesso a planilha no Google Sheets
+        url: URL pública de acesso a planilha no Google Sheets no formato CSV.
 
     Returns:
         Retorna um DataFrame bruto com os dados extraídos

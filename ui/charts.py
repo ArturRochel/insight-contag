@@ -62,16 +62,40 @@ def graficos_gerais(df: pd.DataFrame) -> dict:
 
     ug_mais_recorrente = ugs_solicitantes[0]
 
+    # Demanda mais recorrente
     demandas_assuntos = df["demanda_assunto"].value_counts().reset_index().to_dict(orient="records")
 
     demanda_mais_recorrente = demandas_assuntos[0]
     
+    # Quantidade de atendimentos por atendente
+    atendimentos_consultores = df["consultor"].value_counts().reset_index().to_dict(orient="records")
+
+    df_atendimentos_consultores = pd.DataFrame(atendimentos_consultores)
+
+    # fig_atendimentos_consultores = px.treemap(
+    #     df_atendimentos_consultores,
+    #     path=["consultor"],
+    #     values="count"
+    # )
+
+    fig_atendimentos_consultores = px.bar(
+        df_atendimentos_consultores,
+        x="consultor",
+        y="count",
+        labels={"consultor": "Consultor", "count": "Atendimentos"},
+        title="Atendimentos por Consultor",
+        color="consultor",
+        color_discrete_sequence=px.colors.qualitative.T10
+    )
+
     fig_atendimentos_mes = px.bar(
         meses,
         x="data",
         y="count",
         labels={"data": "Meses", "count": "Atendimentos"},
-        title="Atendimentos por Mês"
+        title="Atendimentos por Mês",
+        color="data",
+        color_discrete_sequence=px.colors.qualitative.D3
     )
 
     fig_atendimentos_dia = px.bar(
@@ -85,7 +109,8 @@ def graficos_gerais(df: pd.DataFrame) -> dict:
     dados_exibicao = {
         "graficos": {
             "atendimentos_mes": fig_atendimentos_mes,
-            "atendimentos_dia": fig_atendimentos_dia
+            "atendimentos_dia": fig_atendimentos_dia,
+            "atendimentos_consultores": fig_atendimentos_consultores
         },
         "cards": {
             "quant_atendimentos": quant_atendimentos,
@@ -96,7 +121,9 @@ def graficos_gerais(df: pd.DataFrame) -> dict:
             "tempo_medio_atendimento": tempo_medio_atendimento,
             "tempo_medio_espera": tempo_medio_de_espera,
             "tempo_medio_diario": tempo_medio_diario,
-            "tempo_medio_mensal": tempo_medio_mensal
+            "tempo_medio_mensal": tempo_medio_mensal,
+            "ug_mais_recorrente": ug_mais_recorrente,
+            "demanda_mais_recorrente": demanda_mais_recorrente
         }
     }
 
