@@ -1,0 +1,122 @@
+site_name: Insight CONTAG
+site_url: "http://10.2.64.37:8095/insight-contag/"
+repo_url: https://github.com/ArturRochel/insight-contag
+repo_name: insight-contag
+nav:
+  - "Arquitetura": index.md
+  - "Layers":
+    - "Components": "texts/layers/components.md"
+    - "Pages": "texts/layers/pages.md"
+    - "UI": "texts/layers/ui.md"
+    - "Composables": "texts/layers/composables.md"
+    - "Stores": "texts/layers/stores.md"
+    - "Services": "texts/layers/services.md"
+    - "Models": "texts/layers/models.md"
+    - "Styles": "texts/layers/styles.md"
+    - "Utils": "texts/layers/utils.md"
+  - "Shared":
+    - "shared/utils": "texts/shared/utils.md"
+  - "Theme":
+    - "theme.ts": "texts/themes/theme.md"
+    - "global.css": "texts/themes/global.md"
+    - "typography.css": "texts/themes/typography.md"
+  - "Dependências": "texts/dependencies.md"
+
+  - "Documentação": texts/documentacao.md
+  - "Referências": "texts/referencias.md"
+  - "Notas de versão": changes.md
+validation:
+  nav:
+    omitted_files: warn
+    not_found: warn
+    absolute_links: warn
+  links:
+    not_found: warn
+    anchors: warn
+    absolute_links: warn
+    unrecognized_links: warn
+plugins:
+  - search
+  - panzoom:
+      full_screen: True
+  - tags
+  - git-revision-date-localized:
+      type: timeago
+  - git-authors
+markdown_extensions:
+  - admonition
+  - tables
+  - pymdownx.snippets
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+watch:
+  - readme.md
+extra_css:
+  - css/custom.css
+extra_javascript:
+  - js/revision.js
+theme:
+  name: material
+  custom_dir: docs/overrides
+  language: pt-BR
+  palette:
+    - scheme: default
+      primary: light-blue
+      accent: deep-purple
+      toggle:
+        icon: material/weather-sunny
+        name: Mudar para tema escuro
+    - scheme: slate
+      primary: light-blue
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Mudar para tema claro
+  features:
+    - navigation.instant 
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.instant.preview
+    - navigation.path
+    - navigation.indexes
+    - toc.follow
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.select
+    - content.tabs.link
+  icon:
+    admonition:
+      note: octicons/tag-16
+      abstract: octicons/checklist-16
+      info: octicons/info-16
+      tip: octicons/sparkles-fill-16
+      success: octicons/check-16
+      question: octicons/question-16
+      warning: octicons/alert-16
+      failure: octicons/x-circle-16
+      danger: octicons/zap-16
+      bug: octicons/bug-16
+      example: octicons/beaker-16
+      quote: octicons/quote-16
