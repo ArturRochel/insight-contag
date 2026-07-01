@@ -4,6 +4,7 @@ from charts import gerar_graficos_gerais
 
 def Metricas_Gerais():
     st.title("Métricas Gerais")
+    st.write("Visão consolidada e geral dos atendimentos registrados")
 
     df = st.session_state["df"]
 

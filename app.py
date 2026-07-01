@@ -3,6 +3,7 @@ import streamlit as st
 from data.loader import carregar_dados
 from core.processor import processar_dados
 from pages import Metricas_Gerais, Metricas_Consultor, Metricas_Demandas, Metricas_Temporais, Metricas_UG
+from components.footer import redenrizar_footer
 
 st.set_page_config(
     page_title="Insight Contag", 
@@ -33,3 +34,4 @@ paginas = st.navigation(
 )
 
 paginas.run()
+redenrizar_footer()
