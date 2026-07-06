@@ -3,13 +3,17 @@ from metrics import calcular_metricas_gerais
 from charts import gerar_graficos_gerais
 
 def Metricas_Gerais():
+    df = st.session_state["df"]
+    metricas = calcular_metricas_gerais(df=df)
+    graficos = gerar_graficos_gerais(metricas_gerais=metricas)
+
+
     st.title("Métricas Gerais")
     st.write("Visão consolidada e geral dos atendimentos registrados")
 
-    df = st.session_state["df"]
 
-    metricas = calcular_metricas_gerais(df=df)
-    graficos = gerar_graficos_gerais(metricas_gerais=metricas)
+    st.badge(f"Primeiro Dia: {metricas['primeiro_dia']}", icon="📅", color="red")
+    st.badge(f"Último Dia: {metricas['ultimo_dia']}", icon="📅", color="red")
 
     a, b, c = st.columns(3)
     d, e, f = st.columns(3)

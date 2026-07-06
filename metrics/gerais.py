@@ -6,7 +6,7 @@ from utils.formatter import formatar_timedelta
 
 locale.setlocale(locale.LC_TIME, "pt_BR.UTF-8")
 
-def calcular_metricas_gerais(df: pd.DataFrame):
+def calcular_metricas_gerais(df: pd.DataFrame) -> dict:
     """
     Calcula as métricas gerais a partir do DataFrame de atendimentos.
 
@@ -18,6 +18,11 @@ def calcular_metricas_gerais(df: pd.DataFrame):
     """
     quant_atendimentos = df.shape[0]
 
+    # Primeiro e ùltimo registro
+    dias_limpos = df["data"].dt.to_period('D') 
+    primeiro_dia = dias_limpos.min().strftime("%d/%m/%y")
+    ultimo_dia = dias_limpos.max().strftime("%d/%m/%y")
+
     # Atendimentos por mês
     meses_limpos = df["data"].dt.to_period('M')
     atendimentos_mes = meses_limpos.value_counts().sort_index()
@@ -25,7 +30,6 @@ def calcular_metricas_gerais(df: pd.DataFrame):
     meses = atendimentos_mes.reset_index()
 
     # Atendimentos por dia
-    dias_limpos = df["data"].dt.to_period('D') 
     atendimentos_dia = dias_limpos.value_counts().sort_index()
     atendimentos_dia.index = atendimentos_dia.index.strftime("%d/%m/%y")
     dias = atendimentos_dia.reset_index()
@@ -85,5 +89,7 @@ def calcular_metricas_gerais(df: pd.DataFrame):
         "demanda_mais_recorrente": demanda_mais_recorrente, 
         "atendimentos_consultores": df_atendimentos_consultores,
         "meses": meses,
-        "dias": dias
+        "dias": dias,
+        "primeiro_dia": primeiro_dia,
+        "ultimo_dia": ultimo_dia
     }

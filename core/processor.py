@@ -64,7 +64,6 @@ def processar_dados(data_raw: pd.DataFrame) -> pd.DataFrame:
 
 if __name__ == "__main__":
     from data.loader import carregar_dados
-    from ui.charts import graficos_gerais
 
     URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRQuV0BuETouydsDkAJJKSXBs_vJFxCsD8zrDndHFhuKgffHIlSC-fALfsZVdQwT7erZj4sX0ZwHaVr/pub?output=csv"
 
@@ -74,6 +73,12 @@ if __name__ == "__main__":
 
     atendimentos_consultores = df["consultor"].value_counts().reset_index().to_dict(orient="records")
 
-    df_atendimentos_consultores = pd.DataFrame(atendimentos_consultores)
+    consultores = [item["consultor"] for item in atendimentos_consultores]
 
-    print(df_atendimentos_consultores["consultor"])
+    df_filtrado = df[df["consultor"] == consultores[5]]
+
+    dias_limpos = df["data"].dt.to_period('D') 
+    primeiro_dia = dias_limpos.min().strftime("%d/%m/%y")
+    ultimo_dia = dias_limpos.max().strftime("%d/%m/%y")
+
+    print(f"Primeiro dia: {primeiro_dia} \n Último dia: {ultimo_dia}")
