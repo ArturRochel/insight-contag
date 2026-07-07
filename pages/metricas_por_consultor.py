@@ -19,7 +19,7 @@ def Metricas_Consultor():
     consultores = [item["consultor"] for item in valores_consultores]
 
     st.title("Métricas por Consultor")
-    st.write("essa página vai conter um filtro ao qual um consultor vai ser escolhido e as métricas serão calculadas com base nele.")
+    st.write("Métricas consolidadas por consultor")
 
     # Filtro para seleção de consultor
     consultor_selecionado = st.segmented_control(

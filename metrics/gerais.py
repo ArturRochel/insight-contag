@@ -73,8 +73,12 @@ def calcular_metricas_gerais(df: pd.DataFrame) -> dict:
 
     df_atendimentos_consultores = pd.DataFrame(atendimentos_consultores)
 
-    # Dados inteiros primeiro e DataFrames depois
+    # Atendimentos por Status da Demanda
+    status_atendimentos = df["status_da_demanda"].value_counts().reset_index().to_dict(orient="records")
 
+    #df_status_atendimentos = pd.DataFrame(status_atendimentos)
+
+    # Dados inteiros primeiro e DataFrames depois
     return {
         "quant_atendimentos": quant_atendimentos,
         "quant_atendimentos_hoje": quant_atendimentos_hoje,
@@ -88,6 +92,7 @@ def calcular_metricas_gerais(df: pd.DataFrame) -> dict:
         "ug_mais_recorrente": ug_mais_recorrente,
         "demanda_mais_recorrente": demanda_mais_recorrente, 
         "atendimentos_consultores": df_atendimentos_consultores,
+        "status_das_demandas": status_atendimentos,
         "meses": meses,
         "dias": dias,
         "primeiro_dia": primeiro_dia,

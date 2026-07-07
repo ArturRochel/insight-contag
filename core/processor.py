@@ -38,6 +38,9 @@ def processar_dados(data_raw: pd.DataFrame) -> pd.DataFrame:
         "Observação": "observacao"
     })
 
+    # Remove a coluna de observação por falta de utilidade no projeto
+    df = df.drop(columns="observacao")
+
     # Padroniza os tipos de dados de acordo com a coluna
     df["data"] = pd.to_datetime(df["data"], dayfirst=True, errors="coerce")
     df[["hora_do_contato", "hora_inicio", "hora_fim", "tempo_decorrido"]] = df[["hora_do_contato", "hora_inicio", "hora_fim", "tempo_decorrido"]].apply(lambda x: pd.to_timedelta(x, errors="coerce"))

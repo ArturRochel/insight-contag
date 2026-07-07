@@ -36,6 +36,17 @@ def Metricas_Gerais():
 
     h.metric(label="Demanda mais Recorrente", value=metricas    ["demanda_mais_recorrente"]["demanda_assunto"], help="Demanda mais presente nos atendimentos", border=True)
 
+    demandas = metricas["status_das_demandas"]
+    tamanho_grupo = 3
+
+    for i in range(0, len(demandas), tamanho_grupo):
+        grupo = demandas[i:i + tamanho_grupo]
+        colunas = st.columns(len(grupo))
+    
+    for coluna, demanda in zip(colunas, grupo):
+        with coluna:
+            st.metric(demanda["status_da_demanda"], demanda["count"], help="Quantidade de demandas no status", border=True)
+    
     st.markdown("---")
 
     st.header("Indicadores Gráficos")

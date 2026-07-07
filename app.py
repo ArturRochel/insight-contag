@@ -11,7 +11,8 @@ st.set_page_config(
     layout="wide"
 )
 
-URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRQuV0BuETouydsDkAJJKSXBs_vJFxCsD8zrDndHFhuKgffHIlSC-fALfsZVdQwT7erZj4sX0ZwHaVr/pub?output=csv"
+#! Atualizado dia 07/07/2026
+URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS6iPvFOVToRP1TXQ8FxzEgEuw_ryVqdi8B50sZE5H7el4kbSd2BFr5akuI8S8_V2yn7JjEP4EQog0X/pub?output=csv"
 
 @st.cache_data(ttl=300)
 def carregar_dados_cached() -> pd.DataFrame:
