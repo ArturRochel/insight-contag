@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 from metrics import calcular_metricas_gerais
 from charts import gerar_graficos_por_consultor
 
@@ -14,6 +15,11 @@ def Metricas_Consultor():
     """
 
     df = st.session_state["df"]
+
+    status_atendimentos = df["status_da_demanda"].value_counts().reset_index().to_dict(orient="records")
+
+    df_status_atendimentos = pd.DataFrame(status_atendimentos)
+
     valores_consultores = df["consultor"].value_counts().reset_index().to_dict(orient="records")
 
     consultores = [item["consultor"] for item in valores_consultores]
