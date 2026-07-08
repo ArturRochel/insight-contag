@@ -12,12 +12,12 @@ def gerar_graficos_por_demanda(metricas_demanda: dict) -> dict:
     """
 
     fig_demandas = px.bar(
-        metricas_demanda["df_status_das_demandas"],
-        x="status_da_demanda",
+        metricas_demanda["df_demandas_assuntos"],
+        x="demanda_assunto",
         y="count",
-        labels={"demanda": "Demanda", "count": "Contagem"},
+        labels={"demanda_assunto": "Demanda", "count": "Contagem"},
         title="Atendimentos por Demanda",
-        color="status_da_demanda",
+        color="demanda_assunto",
         color_discrete_sequence=px.colors.qualitative.T10
     )
 

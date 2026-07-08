@@ -74,14 +74,6 @@ if __name__ == "__main__":
 
     df, linhas = processar_dados(df_raw)
 
-    atendimentos_consultores = df["consultor"].value_counts().reset_index().to_dict(orient="records")
+    resultado = df.groupby('demanda_assunto')['tempo_decorrido'].mean().reset_index().sort_values('tempo_decorrido', ascending=False)
 
-    consultores = [item["consultor"] for item in atendimentos_consultores]
-
-    df_filtrado = df[df["consultor"] == consultores[5]]
-
-    dias_limpos = df["data"].dt.to_period('D') 
-    primeiro_dia = dias_limpos.min().strftime("%d/%m/%y")
-    ultimo_dia = dias_limpos.max().strftime("%d/%m/%y")
-
-    print(f"Primeiro dia: {primeiro_dia} \n Último dia: {ultimo_dia}")
+    print(resultado)
