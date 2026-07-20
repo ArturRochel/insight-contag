@@ -27,7 +27,7 @@ def Metricas_Demandas():
         st.subheader("Tempo Médio de Atendimento por Demanda", help="As 10 demandas com tempo de atendimento mais longo.")
         st.plotly_chart(figure_or_data=graficos_demandas["fig_demandas_demoradas"], width="stretch")
 
-    demandas = [item["demanda_assunto"] for item in lista_demandas][:5]
+    demandas = [item["demanda_assunto"] for item in lista_demandas][:10]
 
     st.markdown("---")
 

@@ -2,7 +2,7 @@ import locale
 import pandas as pd
 from datetime import date
 from utils.formatter import formatar_timedelta
-from metrics.base import extrair_intervalo_datas, calcular_frequencia
+from metrics.base import extrair_intervalo_datas, calcular_frequencia, calcular_variacao_mensal
 
 locale.setlocale(locale.LC_TIME, "pt_BR.UTF-8")
 
@@ -14,7 +14,7 @@ def calcular_metricas_gerais(df: pd.DataFrame) -> dict:
         df: DataFrame contendo os dados de atendimentos.    
 
     Returns:
-        dict: Dicionário contendo as métricas gerais calculadas.
+        dict: Dicionário contendo as métricas gerais calculadas e suas variações (delta).
     """
     if df.empty:
         return {}
@@ -23,6 +23,9 @@ def calcular_metricas_gerais(df: pd.DataFrame) -> dict:
 
     # Primeiro e último registro
     primeiro_dia, ultimo_dia = extrair_intervalo_datas(df)
+
+    # Cálculo das variações (delta) mensais
+    variacoes = calcular_variacao_mensal(df)
 
     # Atendimentos por mês
     meses_limpos = df["data"].dt.to_period('M')
@@ -87,6 +90,9 @@ def calcular_metricas_gerais(df: pd.DataFrame) -> dict:
         "tempo_medio_espera": tempo_medio_espera,
         "tempo_medio_diario": tempo_medio_diario,
         "tempo_medio_mensal": tempo_medio_mensal,
+        "delta_atendimentos": variacoes.get("delta_atendimentos"),
+        "delta_tempo_espera": variacoes.get("delta_tempo_espera"),
+        "delta_tempo_atendimento": variacoes.get("delta_tempo_atendimento"),
         "ug_mais_recorrente": ug_mais_recorrente,
         "demanda_mais_recorrente": demanda_mais_recorrente, 
         "atendimentos_consultores": df_atendimentos_consultores,
