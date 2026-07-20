@@ -52,7 +52,7 @@ def Metricas_Gerais():
     st.header("Indicadores Gráficos")
 
     # Gráficos
-    st.plotly_chart(figure_or_data=graficos["fig_atendimentos_consultores"])
-    st.plotly_chart(figure_or_data=graficos["fig_atendimentos_mes"])
-    st.plotly_chart(figure_or_data=graficos["fig_atendimentos_dia"])
+    st.plotly_chart(figure_or_data=graficos["fig_atendimentos_consultores"], width="stretch")
+    st.plotly_chart(figure_or_data=graficos["fig_atendimentos_mes"], width="stretch")
+    st.plotly_chart(figure_or_data=graficos["fig_atendimentos_dia"], width="stretch")
 

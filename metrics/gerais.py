@@ -1,8 +1,8 @@
-
 import locale
 import pandas as pd
 from datetime import date
 from utils.formatter import formatar_timedelta
+from metrics.base import extrair_intervalo_datas, calcular_frequencia
 
 locale.setlocale(locale.LC_TIME, "pt_BR.UTF-8")
 
@@ -16,12 +16,13 @@ def calcular_metricas_gerais(df: pd.DataFrame) -> dict:
     Returns:
         dict: Dicionário contendo as métricas gerais calculadas.
     """
+    if df.empty:
+        return {}
+
     quant_atendimentos = df.shape[0]
 
-    # Primeiro e ùltimo registro
-    dias_limpos = df["data"].dt.to_period('D') 
-    primeiro_dia = dias_limpos.min().strftime("%d/%m/%y")
-    ultimo_dia = dias_limpos.max().strftime("%d/%m/%y")
+    # Primeiro e último registro
+    primeiro_dia, ultimo_dia = extrair_intervalo_datas(df)
 
     # Atendimentos por mês
     meses_limpos = df["data"].dt.to_period('M')
@@ -30,6 +31,7 @@ def calcular_metricas_gerais(df: pd.DataFrame) -> dict:
     meses = atendimentos_mes.reset_index()
 
     # Atendimentos por dia
+    dias_limpos = df["data"].dt.to_period('D')
     atendimentos_dia = dias_limpos.value_counts().sort_index()
     atendimentos_dia.index = atendimentos_dia.index.strftime("%d/%m/%y")
     dias = atendimentos_dia.reset_index()
@@ -39,8 +41,8 @@ def calcular_metricas_gerais(df: pd.DataFrame) -> dict:
     atendimentos_hoje = df[df["data"].dt.date == data_atual]
     quant_atendimentos_hoje = len(atendimentos_hoje)
 
-    media_diaria = round(quant_atendimentos / len(atendimentos_dia), 2)
-    media_mensal = round(quant_atendimentos / len(atendimentos_mes), 2)
+    media_diaria = round(quant_atendimentos / len(atendimentos_dia), 2) if len(atendimentos_dia) > 0 else 0
+    media_mensal = round(quant_atendimentos / len(atendimentos_mes), 2) if len(atendimentos_mes) > 0 else 0
 
     # Tempo total de atendimento
     tempo_total = df["tempo_decorrido"].sum()
@@ -53,40 +55,28 @@ def calcular_metricas_gerais(df: pd.DataFrame) -> dict:
     tempo_medio_espera = formatar_timedelta(df["tempo_de_espera"].mean())
 
     # Tempo médio de atendimento diário
-    tempo_medio_diario = formatar_timedelta(tempo_total / len(atendimentos_dia))
+    tempo_medio_diario = formatar_timedelta(tempo_total / len(atendimentos_dia)) if len(atendimentos_dia) > 0 else "00:00:00"
 
     # Tempo médio de atendimento mensal
-    tempo_medio_mensal = formatar_timedelta(tempo_total / len(atendimentos_mes))
+    tempo_medio_mensal = formatar_timedelta(tempo_total / len(atendimentos_mes)) if len(atendimentos_mes) > 0 else "00:00:00"
 
-    # UG Solicitante mais recorrente
-    ugs_solicitantes = df["ug_solicitante"].value_counts().reset_index().to_dict(orient="records")
+    # UGs solicitantes e UG mais recorrente
+    df_ugs_solicitantes = calcular_frequencia(df, "ug_solicitante")
+    ugs_solicitantes = df_ugs_solicitantes.to_dict(orient="records")
+    ug_mais_recorrente = ugs_solicitantes[0] if ugs_solicitantes else {"ug_solicitante": "N/A", "count": 0}
 
-    ug_mais_recorrente = ugs_solicitantes[0]
+    # Demandas e Demanda mais recorrente
+    df_demandas_assuntos = calcular_frequencia(df, "demanda_assunto")
+    demandas_assuntos = df_demandas_assuntos.to_dict(orient="records")
+    demanda_mais_recorrente = demandas_assuntos[0] if demandas_assuntos else {"demanda_assunto": "N/A", "count": 0}
 
-    # Demanda mais recorrente
-    demandas_assuntos = df["demanda_assunto"].value_counts().reset_index().to_dict(orient="records")
-
-    demanda_mais_recorrente = demandas_assuntos[0]
-    
-    # Quantidade de atendimentos por atendente
-    atendimentos_consultores = df["consultor"].value_counts().reset_index().to_dict(orient="records")
-
-    df_atendimentos_consultores = pd.DataFrame(atendimentos_consultores)
+    # Atendimentos por atendente
+    df_atendimentos_consultores = calcular_frequencia(df, "consultor")
 
     # Atendimentos por Status do atendimento
-    status_atendimentos = df["status_da_demanda"].value_counts().reset_index().to_dict(orient="records")
+    df_status_atendimentos = calcular_frequencia(df, "status_da_demanda")
+    status_atendimentos = df_status_atendimentos.to_dict(orient="records")
 
-    df_status_atendimentos = pd.DataFrame(status_atendimentos)
-
-    # Atendimentos por Demanda/Assunto
-    demandas_assuntos = df["demanda_assunto"].value_counts().reset_index().to_dict(orient="records")
-
-    df_demandas_assuntos = pd.DataFrame(demandas_assuntos)
-
-    # Atendimentos por UG
-    df_ugs_solicitantes = pd.DataFrame(ugs_solicitantes)
-
-    # Dados inteiros primeiro e DataFrames depois
     return {
         "quant_atendimentos": quant_atendimentos,
         "quant_atendimentos_hoje": quant_atendimentos_hoje,
