@@ -20,8 +20,11 @@ def calcular_metricas_por_demanda(df: pd.DataFrame, demanda_selecionada: str = N
         return {
             "df_top_demandas_demoradas": pd.DataFrame(columns=["demanda_assunto", "tempo_medio"]),
             "df_top_demandas_recorrentes": pd.DataFrame(columns=["demanda_assunto", "count"]),
+            "lista_todas_demandas": [],
             "metricas_filtradas": {}
         }
+
+    lista_todas_demandas = sorted(df["demanda_assunto"].dropna().unique().tolist())
 
     # Top 10 demandas mais demoradas em minutos
     df_top_demandas_demoradas = calcular_tempo_medio_por_grupo(
@@ -76,5 +79,6 @@ def calcular_metricas_por_demanda(df: pd.DataFrame, demanda_selecionada: str = N
     return {
         "df_top_demandas_demoradas": df_top_demandas_demoradas,
         "df_top_demandas_recorrentes": df_top_demandas_recorrentes,
+        "lista_todas_demandas": lista_todas_demandas,
         "metricas_filtradas": metricas_filtradas
     }

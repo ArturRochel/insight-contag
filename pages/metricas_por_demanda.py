@@ -14,7 +14,6 @@ def Metricas_Demandas():
     st.write("Dados consolidados a partir das demandas da consultoria")
 
     df = st.session_state["df"]
-    lista_demandas = df["demanda_assunto"].value_counts().reset_index().to_dict(orient="records")
 
     metricas = calcular_metricas_por_demanda(df)
     graficos_demandas = gerar_graficos_por_demanda(metricas)
@@ -27,18 +26,21 @@ def Metricas_Demandas():
         st.subheader("Tempo Médio de Atendimento por Demanda", help="As 10 demandas com tempo de atendimento mais longo.")
         st.plotly_chart(figure_or_data=graficos_demandas["fig_demandas_demoradas"], width="stretch")
 
-    demandas = [item["demanda_assunto"] for item in lista_demandas][:10]
+    lista_demandas = metricas.get("lista_todas_demandas", [])
 
     st.markdown("---")
 
-    demanda_selecionada = st.segmented_control(
+    demanda_selecionada = st.selectbox(
         "Selecione uma demanda:",
-        demandas,
-        help="Selecione uma das 5 demandas mais recorrentes para visualizar os gráficos",
-        required=True
-    )  
+        lista_demandas,
+        index=None,
+        placeholder="Escolha uma demanda...",
+        help="Selecione uma demanda/assunto para visualizar os indicadores e as UGs solicitantes"
+    )
 
-    if demanda_selecionada is not None:
+    if demanda_selecionada is None:
+        st.info("Por favor, selecione uma demanda acima para visualizar seus indicadores e UGs solicitantes.")
+    else:
         metricas_detalhadas = calcular_metricas_por_demanda(df, demanda_selecionada=demanda_selecionada)
         m_filtradas = metricas_detalhadas["metricas_filtradas"]
 
