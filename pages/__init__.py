@@ -3,11 +3,13 @@ from .metricas_por_consultor import Metricas_Consultor
 from .metricas_por_demanda import Metricas_Demandas
 from .metricas_por_ug import Metricas_UG
 from .metricas_temporais import Metricas_Temporais
+from .metricas_encadeadas import Metricas_Encadeadas
 
 __all__ = [
     "Metricas_Gerais",
     "Metricas_Consultor",
     "Metricas_Demandas",
     "Metricas_UG",
-    "Metricas_Temporais"
+    "Metricas_Temporais",
+    "Metricas_Encadeadas"
 ]

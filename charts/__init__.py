@@ -3,6 +3,7 @@ from .por_consultor import gerar_graficos_por_consultor
 from .por_demanda import gerar_graficos_por_demanda, gerar_grafico_ugs_por_demanda
 from .por_ug import gerar_graficos_por_ug, gerar_grafico_demandas_por_ug
 from .temporais import gerar_graficos_temporais, gerar_grafico_curva_dia_geral, gerar_grafico_volume_diario
+from .encadeadas import gerar_graficos_encadeadas
 
 __all__ = [
     "gerar_graficos_gerais",
@@ -13,5 +14,6 @@ __all__ = [
     "gerar_grafico_demandas_por_ug",
     "gerar_graficos_temporais",
     "gerar_grafico_curva_dia_geral",
-    "gerar_grafico_volume_diario"
+    "gerar_grafico_volume_diario",
+    "gerar_graficos_encadeadas"
 ]
