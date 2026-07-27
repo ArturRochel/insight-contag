@@ -54,7 +54,7 @@ def Metricas_Temporais():
 
     opcao_periodo = st.segmented_control(
         "Selecione o período de análise:",
-        ["Todas as Datas", "Último Mês", "Último Trimestre", "Último Semestre", "Ano Atual", "Personalizado"],
+        ["Todas as Datas", "Última Semana", "Último Mês", "Último Trimestre", "Último Semestre", "Ano Atual", "Personalizado"],
         default="Todas as Datas",
         help="Escolha um atalho de período ou selecione Personalizado para definir datas customizadas",
         required=True
@@ -63,7 +63,9 @@ def Metricas_Temporais():
     data_inicio = min_date
     data_fim = max_date
 
-    if opcao_periodo == "Último Mês":
+    if opcao_periodo == "Última Semana":
+        data_inicio = max_date - pd.Timedelta(days=7)
+    elif opcao_periodo == "Último Mês":
         data_inicio = max_date - pd.Timedelta(days=30)
     elif opcao_periodo == "Último Trimestre":
         data_inicio = max_date - pd.Timedelta(days=90)
