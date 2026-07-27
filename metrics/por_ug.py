@@ -21,9 +21,11 @@ def calcular_metricas_por_ug(df: pd.DataFrame, ug_selecionada: str = None) -> di
             "df_ugs_solicitantes": pd.DataFrame(columns=["ug_solicitante", "count"]),
             "df_ugs_recorrentes": pd.DataFrame(columns=["ug_solicitante", "count"]),
             "df_ugs_tempo_total": pd.DataFrame(columns=["ug_solicitante", "tempo_total_horas"]),
+            "lista_todas_ugs": [],
             "metricas_filtradas": {}
         }
 
+    lista_todas_ugs = sorted(df["ug_solicitante"].dropna().unique().tolist())
     df_ugs_solicitantes = calcular_frequencia(df, "ug_solicitante")
     df_ugs_recorrentes = calcular_frequencia(df, "ug_solicitante", top_n=10)
 
@@ -81,5 +83,6 @@ def calcular_metricas_por_ug(df: pd.DataFrame, ug_selecionada: str = None) -> di
         "df_ugs_solicitantes": df_ugs_solicitantes,
         "df_ugs_recorrentes": df_ugs_recorrentes,
         "df_ugs_tempo_total": df_ugs_tempo_total,
+        "lista_todas_ugs": lista_todas_ugs,
         "metricas_filtradas": metricas_filtradas
     }

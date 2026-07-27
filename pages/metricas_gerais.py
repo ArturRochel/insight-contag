@@ -3,12 +3,16 @@ from metrics import calcular_metricas_gerais
 from charts import gerar_graficos_gerais
 
 def Metricas_Gerais():
-    df = st.session_state["df"]
-    metricas = calcular_metricas_gerais(df=df)
-    graficos = gerar_graficos_gerais(metricas_gerais=metricas)
-
     st.title("Métricas Gerais")
     st.write("Visão consolidada e geral dos atendimentos registrados")
+
+    df = st.session_state["df"]
+    if df.empty:
+        st.warning("⚠️ Nenhum registro de atendimento encontrado na base de dados.")
+        st.stop()
+
+    metricas = calcular_metricas_gerais(df=df)
+    graficos = gerar_graficos_gerais(metricas_gerais=metricas)
 
     st.badge(f"Primeiro Dia: {metricas['primeiro_dia']}", icon="📅", color="red")
     st.badge(f"Último Dia: {metricas['ultimo_dia']}", icon="📅", color="red")
@@ -57,10 +61,9 @@ def Metricas_Gerais():
     for i in range(0, len(demandas), tamanho_grupo):
         grupo = demandas[i:i + tamanho_grupo]
         colunas = st.columns(len(grupo))
-    
-    for coluna, demanda in zip(colunas, grupo):
-        with coluna:
-            st.metric(demanda["status_da_demanda"], demanda["count"], help="Quantidade de demandas no status", border=True)
+        for coluna, demanda in zip(colunas, grupo):
+            with coluna:
+                st.metric(demanda["status_da_demanda"], demanda["count"], help="Quantidade de demandas no status", border=True)
     
     st.markdown("---")
 

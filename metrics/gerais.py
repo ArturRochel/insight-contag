@@ -17,7 +17,31 @@ def calcular_metricas_gerais(df: pd.DataFrame) -> dict:
         dict: Dicionário contendo as métricas gerais calculadas e suas variações (delta).
     """
     if df.empty:
-        return {}
+        return {
+            "quant_atendimentos": 0,
+            "quant_atendimentos_hoje": 0,
+            "media_diaria": 0.0,
+            "media_mensal": 0.0,
+            "tempo_total_atendimento": "0h 0m",
+            "tempo_medio_atendimento": "0h 0m",
+            "tempo_medio_espera": "0h 0m",
+            "tempo_medio_diario": "0h 0m",
+            "tempo_medio_mensal": "0h 0m",
+            "delta_atendimentos": None,
+            "delta_tempo_espera": None,
+            "delta_tempo_atendimento": None,
+            "ug_mais_recorrente": {"ug_solicitante": "N/A", "count": 0},
+            "demanda_mais_recorrente": {"demanda_assunto": "N/A", "count": 0},
+            "atendimentos_consultores": pd.DataFrame(columns=["consultor", "count"]),
+            "status_das_demandas": [],
+            "df_status_das_demandas": pd.DataFrame(columns=["status_da_demanda", "count"]),
+            "df_demandas_assuntos": pd.DataFrame(columns=["demanda_assunto", "count"]),
+            "df_ugs_solicitantes": pd.DataFrame(columns=["ug_solicitante", "count"]),
+            "meses": pd.DataFrame(columns=["data", "count"]),
+            "dias": pd.DataFrame(columns=["data", "count"]),
+            "primeiro_dia": "N/A",
+            "ultimo_dia": "N/A"
+        }
 
     quant_atendimentos = df.shape[0]
 

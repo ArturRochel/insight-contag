@@ -26,19 +26,21 @@ def Metricas_UG():
         st.subheader("Tempo Total de Atendimento por UG", help="As 10 Unidades Gestoras com maior tempo total acumulado de atendimento (em horas).")
         st.plotly_chart(figure_or_data=graficos["fig_ugs_tempo_total"], width="stretch")
 
-    df_recorrentes = metricas.get("df_ugs_recorrentes")
-    lista_ugs = df_recorrentes["ug_solicitante"].tolist() if df_recorrentes is not None and not df_recorrentes.empty else []
+    lista_ugs = metricas.get("lista_todas_ugs", [])
 
     st.markdown("---")
 
-    ug_selecionada = st.segmented_control(
+    ug_selecionada = st.selectbox(
         "Selecione uma Unidade Gestora:",
         lista_ugs,
-        help="Selecione uma das 10 UGs mais recorrentes para visualizar os indicadores e as demandas",
-        required=True
+        index=None,
+        placeholder="Escolha uma Unidade Gestora...",
+        help="Selecione uma Unidade Gestora para visualizar os indicadores e as demandas específicas"
     )
 
-    if ug_selecionada is not None:
+    if ug_selecionada is None:
+        st.info("Por favor, selecione uma Unidade Gestora acima para visualizar seus indicadores e demandas específicas.")
+    else:
         metricas_detalhadas = calcular_metricas_por_ug(df, ug_selecionada=ug_selecionada)
         m_filtradas = metricas_detalhadas["metricas_filtradas"]
 
