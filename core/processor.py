@@ -42,7 +42,7 @@ def processar_dados(data_raw: pd.DataFrame) -> pd.DataFrame:
     df = df.drop(columns="observacao")
 
     # Padroniza os tipos de dados de acordo com a coluna
-    df["data"] = pd.to_datetime(df["data"], dayfirst=True, errors="coerce")
+    df["data"] = pd.to_datetime(df["data"].str.strip(), format="%d/%m/%Y", errors="coerce")
     df[["hora_do_contato", "hora_inicio", "hora_fim", "tempo_decorrido"]] = df[["hora_do_contato", "hora_inicio", "hora_fim", "tempo_decorrido"]].apply(lambda x: pd.to_timedelta(x, errors="coerce"))
 
     # Calcula o tempo decorrido de atendimento
@@ -68,7 +68,7 @@ def processar_dados(data_raw: pd.DataFrame) -> pd.DataFrame:
 if __name__ == "__main__":
     from data.loader import carregar_dados
 
-    URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRQuV0BuETouydsDkAJJKSXBs_vJFxCsD8zrDndHFhuKgffHIlSC-fALfsZVdQwT7erZj4sX0ZwHaVr/pub?output=csv"
+    URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS6iPvFOVToRP1TXQ8FxzEgEuw_ryVqdi8B50sZE5H7el4kbSd2BFr5akuI8S8_V2yn7JjEP4EQog0X/pub?output=csv"
 
     df_raw = carregar_dados(URL)
 
