@@ -1,7 +1,7 @@
 import locale
 import pandas as pd
 from utils.formatter import formatar_timedelta
-from metrics.base import extrair_intervalo_datas
+from metrics.base import extrair_intervalo_datas, calcular_frequencia
 
 locale.setlocale(locale.LC_TIME, "pt_BR.UTF-8")
 
@@ -25,6 +25,8 @@ def calcular_metricas_por_consultor(df: pd.DataFrame, consultor: str = None) -> 
             "media_diaria": 0,
             "tempo_medio_atendimento": "00:00:00",
             "tempo_medio_espera": "00:00:00",
+            "ug_mais_atendida": "N/A",
+            "demanda_mais_atendida": "N/A",
             "primeiro_dia": "N/A",
             "ultimo_dia": "N/A",
             "meses": pd.DataFrame(columns=["data", "count"]),
@@ -52,12 +54,21 @@ def calcular_metricas_por_consultor(df: pd.DataFrame, consultor: str = None) -> 
     tempo_medio_atendimento = formatar_timedelta(df_filtrado["tempo_decorrido"].mean())
     tempo_medio_espera = formatar_timedelta(df_filtrado["tempo_de_espera"].mean())
 
+    # UG e Demanda/Assunto mais atendida por esse consultor
+    df_ug = calcular_frequencia(df_filtrado, "ug_solicitante")
+    ug_mais_atendida = df_ug.iloc[0]["ug_solicitante"] if not df_ug.empty else "N/A"
+
+    df_demanda = calcular_frequencia(df_filtrado, "demanda_assunto")
+    demanda_mais_atendida = df_demanda.iloc[0]["demanda_assunto"] if not df_demanda.empty else "N/A"
+
     return {
         "quant_atendimentos": quant_atendimentos,
         "media_mensal": media_mensal,
         "media_diaria": media_diaria,
         "tempo_medio_atendimento": tempo_medio_atendimento,
         "tempo_medio_espera": tempo_medio_espera,
+        "ug_mais_atendida": ug_mais_atendida,
+        "demanda_mais_atendida": demanda_mais_atendida,
         "primeiro_dia": primeiro_dia,
         "ultimo_dia": ultimo_dia,
         "meses": meses,

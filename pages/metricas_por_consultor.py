@@ -33,6 +33,7 @@ def Metricas_Consultor():
 
         a, b, c = st.columns(3)
         d, e = st.columns(2)
+        f, g = st.columns(2)
 
         a.metric(label="Total de Atendimentos", value=metricas["quant_atendimentos"], help=f"Quantidade total de atendimentos realizados por {consultor_selecionado}", border=True)
         b.metric(label="Média Mensal de Atendimentos", value=metricas["media_mensal"], help=f"Média mensal de atendimentos de {consultor_selecionado}", border=True)
@@ -40,6 +41,9 @@ def Metricas_Consultor():
 
         d.metric(label="Tempo Médio de Atendimento", value=metricas["tempo_medio_atendimento"], help=f"Duração média dos atendimentos realizados por {consultor_selecionado}", border=True)
         e.metric(label="Tempo Médio de Espera", value=metricas["tempo_medio_espera"], help=f"Tempo médio de espera dos atendimentos realizados por {consultor_selecionado}", border=True)
+
+        f.metric(label="UG mais Atendida", value=metricas["ug_mais_atendida"], help=f"Unidade Gestora mais atendida por {consultor_selecionado}", border=True)
+        g.metric(label="Demanda mais Atendida", value=metricas["demanda_mais_atendida"], help=f"Demanda/assunto mais atendido por {consultor_selecionado}", border=True)
 
         st.markdown("---")
         st.header("Indicadores Gráficos")
