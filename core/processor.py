@@ -14,14 +14,15 @@ def processar_dados(data_raw: pd.DataFrame) -> pd.DataFrame:
     Returns:
         Retorna um DataFrame limpo e padronizado com os dados extraídos, e o número de linhas descartadas.
     """
-    # Remove a primeira coluna vazia
-    df = data_raw.drop(columns="Unnamed: 0")
+    # Remove a primeira coluna vazia se existir
+    cols_to_drop = [col for col in data_raw.columns if pd.isna(col) or str(col).startswith("Unnamed:") or str(col).strip() == ""]
+    df = data_raw.drop(columns=cols_to_drop, errors="ignore").copy()
 
     # Quantidade de linhas antes da limpeza
     linhas_antes = df.shape[0]
 
     # Remove espaços nos nomes das colunas
-    df.columns = df.columns.str.strip()
+    df.columns = df.columns.astype(str).str.strip()
 
     # Renomeia as colunas para padronizar os nomes
     df = df.rename(columns={
@@ -33,13 +34,15 @@ def processar_dados(data_raw: pd.DataFrame) -> pd.DataFrame:
         "Demanda/Assunto": "demanda_assunto",
         "Consultor": "consultor",
         "Nome do Servidor UG": "nome_do_servidor_ug",
+        "Nome do Servidor (UG)": "nome_do_servidor_ug",
         "UG do Solicitante": "ug_solicitante",
         "Status da Demanda": "status_da_demanda",
-        "Observação": "observacao"
+        "Observação": "observacao",
+        "Observacao": "observacao"
     })
 
     # Remove a coluna de observação por falta de utilidade no projeto
-    df = df.drop(columns="observacao")
+    df = df.drop(columns="observacao", errors="ignore")
 
     # Padroniza os tipos de dados de acordo com a coluna
     df["data"] = pd.to_datetime(df["data"].str.strip(), format="%d/%m/%Y", errors="coerce")
