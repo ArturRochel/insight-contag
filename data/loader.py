@@ -20,6 +20,7 @@ def carregar_dados(url: str) -> pd.DataFrame:
             row_vals = [str(val).strip().lower() for val in row.values if pd.notna(val)]
             if "data" in row_vals and any(c in row_vals for c in ["hora do contato", "consultor", "demanda/assunto"]):
                 df_raw.columns = df_raw.iloc[idx]
+                df_raw.columns.name = None
                 df_raw = df_raw.iloc[idx + 1:].reset_index(drop=True)
                 break
 

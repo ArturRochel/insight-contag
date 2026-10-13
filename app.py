@@ -52,8 +52,7 @@ def carregar_dados_cached() -> pd.DataFrame:
 df_raw = carregar_dados_cached()
 df, linhas = processar_dados(df_raw) # Retorna o Dataframe limpo e número de linhas excluídas
 
-if "df" not in st.session_state:
-    st.session_state["df"] = df
+st.session_state["df"] = df
 
 paginas = st.navigation(
     [

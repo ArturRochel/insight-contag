@@ -1,8 +1,32 @@
 import pandas as pd
-import plotly.express as px
-import locale
+import unicodedata
 
-locale.setlocale(locale.LC_TIME, "pt_BR.UTF-8")
+def _normalizar_coluna(col: str) -> str:
+    col_str = str(col).strip().lower()
+    col_str = "".join(c for c in unicodedata.normalize("NFD", col_str) if unicodedata.category(c) != "Mn")
+    if col_str == "data":
+        return "data"
+    elif "contato" in col_str:
+        return "hora_do_contato"
+    elif "inicio" in col_str:
+        return "hora_inicio"
+    elif "fim" in col_str:
+        return "hora_fim"
+    elif "tempo decorrido" in col_str:
+        return "tempo_decorrido"
+    elif "demanda" in col_str and ("assunto" in col_str or "/" in col_str):
+        return "demanda_assunto"
+    elif "consultor" in col_str:
+        return "consultor"
+    elif "servidor" in col_str:
+        return "nome_do_servidor_ug"
+    elif "ug" in col_str and "solicitante" in col_str:
+        return "ug_solicitante"
+    elif "status" in col_str:
+        return "status_da_demanda"
+    elif "observa" in col_str:
+        return "observacao"
+    return str(col).strip()
 
 def processar_dados(data_raw: pd.DataFrame) -> pd.DataFrame:
     """
@@ -21,25 +45,8 @@ def processar_dados(data_raw: pd.DataFrame) -> pd.DataFrame:
     # Quantidade de linhas antes da limpeza
     linhas_antes = df.shape[0]
 
-    # Remove espaços nos nomes das colunas
-    df.columns = df.columns.astype(str).str.strip()
-
-    # Renomeia as colunas para padronizar os nomes
-    df = df.rename(columns={
-        "Data": "data",
-        "Hora do Contato": "hora_do_contato",
-        "Hora Início": "hora_inicio",
-        "Hora Fim": "hora_fim",
-        "Tempo Decorrido": "tempo_decorrido",
-        "Demanda/Assunto": "demanda_assunto",
-        "Consultor": "consultor",
-        "Nome do Servidor UG": "nome_do_servidor_ug",
-        "Nome do Servidor (UG)": "nome_do_servidor_ug",
-        "UG do Solicitante": "ug_solicitante",
-        "Status da Demanda": "status_da_demanda",
-        "Observação": "observacao",
-        "Observacao": "observacao"
-    })
+    # Renomeia as colunas de forma robusta e tolerante a variações
+    df.columns = [_normalizar_coluna(col) for col in df.columns]
 
     # Remove a coluna de observação por falta de utilidade no projeto
     df = df.drop(columns="observacao", errors="ignore")
@@ -69,6 +76,9 @@ def processar_dados(data_raw: pd.DataFrame) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
+    import sys
+    import os
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
     from data.loader import carregar_dados
 
     URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS6iPvFOVToRP1TXQ8FxzEgEuw_ryVqdi8B50sZE5H7el4kbSd2BFr5akuI8S8_V2yn7JjEP4EQog0X/pub?output=csv"
